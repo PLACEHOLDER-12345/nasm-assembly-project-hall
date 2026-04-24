@@ -1,0 +1,80 @@
+MINIMAL .obj EXPLANATION
+
+HEADER
+
+0000: 64 86 = using x86-64 architecture
+0002: 01 00 = 1 section
+0004: 8a d9 c4 69 = unix timestamp; assembled 3/26/2026 @ 7:00:26 GMT
+0008: 4d 00 00 00 = symbol table @ 004d
+000c: 06 00 00 00 = 6 symbols used
+0010: 00 00 = no optional header
+0012: 00 00 = no special characteristics
+
+.text SECTION HEADER
+
+0014: 2e 74 65 78 74 00 00 00 = .text + padding
+001c: 00 00 00 00 00 00 00 00 = unused VirtualSize and VirtualAddress
+0024: 07 00 00 00 = 7 bytes of assembly
+0028: 3c 00 00 00 = assembly @ 003c
+002c: 43 00 00 00 = relocations @ 0043
+0030: 00 00 00 00 = null ptr to line no.s
+0034: 01 00 00 00 = 1 relocation
+0038: 20 00 50 60 = characteristics: code, execute, readable
+
+ASSEMBLY @ .text
+
+003c: 31 c9 = XOR ecx, ecx
+003e: e8 00 00 00 00 = CALL ExitProcess (reloc)
+
+RELOCATIONS
+
+0043: 03 00 00 00 = offset in .text to replace rip-relative address
+0047: 05 00 00 00 = index 5 in the symbol table
+004b: 04 00 = replace with 32-bit rip-relative address
+
+SYMBOL TABLE
+
+004d: 2e 66 69 6c 65 00 00 00 = .file + padding
+0055: 00 00 00 00 = value: 0
+0059: fe ff = section -2 (debug)
+005b: 00 00 = type = 0 (for what purpose?)
+005d: 67 = file storage class
+005e: 01 = 1 aux symbol
+
+005f: 6d 69 6e 69 6d 61 6c 2e 73 = minimal.s
+0068: 00 00 00 00 00 00 00 00 00 = padding
+
+0071: 2e 74 65 78 74 00 00 00 = .text + padding
+0079: 00 00 00 00 = value: 0 (offset)
+007d: 01 00 = section 1 (.text)
+007f: 00 00 = type = 0 (for what?)
+0081: 03 = static storage class
+0082: 00 = no aux symbols
+
+0083: 2e 61 62 73 6f 6c 75 74 = .absolut
+008b: 00 00 00 00 = value: 0
+008f: ff ff = section -1 (absolute)
+0091: 00 00 = type = 0 (for what?)
+0093: 03 = static storage class
+0094: 00 = no aux symbols
+
+0095: 6d 61 69 6e 00 00 00 00 = main + padding
+009d: 00 00 00 00 = value (location in text) = 0
+00a1: 01 00 = section 1 (text)
+00a3: 00 00 = type = 0
+00a5: 02 = external storage class
+00a6: 00 = no aux symbols
+
+00a7: 00 00 00 00 04 00 00 00 = offset 4 = 00bd in string table
+00af: 00 00 00 00 = value = 0
+00b3: 00 00 = section 0 (?)
+00b5: 00 00 = type = 0
+00b7: 02 = ext. storage
+00b8: 00 = no aux
+
+00b9: 10 00 00 00 = 12B of strings + this DWORD = 16B total
+00bd: 45 78 69 74 50 72 6f 63 65 73 73 00 = ExitProcess + null
+
+FINISH!
+
+link w/: gcc minimal.obj -o minimal.exe -lkernel32

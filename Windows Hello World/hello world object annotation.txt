@@ -1,0 +1,204 @@
+HELLO WORLD .obj FILE EXPLANATION
+
+HEADER
+
+000000: 64 86 -> using x86-64 architecture
+000002: 02 00 -> 2 sections (.data, .text)
+000004: 6f a2 c3 69 -> unix time of assembly
+000008: e5 00 00 00 -> address of symbol table
+00000c: 0e 00 00 00 -> 0xF = 14 symbols used
+000010: 00 00 -> optional header size 0
+000012: 00 00 -> no special flags
+
+.data SECTION HEADER
+
+000014: 2e 64 61 74 61 00 00 00 -> ".data" + padding
+00001c: 00 00 00 00 00 00 00 00 -> unused VirtualSize & Virtual Address
+000024: 11 00 00 00 -> 0x11 = 17 bytes of raw data
+000028: 64 00 00 00 -> address of raw data = 000064
+00002c: 75 00 00 00 -> address of relocations = 000075
+000030: 00 00 00 00 -> null ptr to line no.s
+000034: 00 00 -> 0 relocations
+000036: 00 00 -> 0 line numbers
+000038: 40 00 30 c0 -> characteristics (readable init'd data)
+
+.text SECTION HEADER
+
+00003c: 2e 74 65 78 74 00 00 00 -> ".text" + padding
+000044: 00 00 00 00 00 00 00 00 -> unused Virtual Size & Address
+00004c: 3e 00 00 00 -> 62 bytes of raw data i.e. assembly
+000050: 75 00 00 00 -> assembly at 000075
+000054: b3 00 00 00 -> relocations @ 00000b3
+000058: 00 00 00 00 -> null ptr to line no.s
+00005c: 05 00 -> 5 relocations
+00005e: 00 00 -> 0 line numbers
+000060: 20 00 50 60 -> characteristics: code, execute, read
+
+RAW .data CONTENTS
+
+msg:
+
+000064: 48 65 6c 6c 6f -> "Hello"
+000069: 20 -> space
+00006a: 57 6f 72 6c 64 21 -> "World!"
+000070: 00 -> null to end string
+
+written:
+
+000071: 00 00 00 00 -> 0
+
+RAW .text ASSEMBLY
+
+000075: 55 -> PUSH rbp
+000076: 48 89 e5 -> MOV rbp, rsp
+000079: 48 83 ec 28 -> SUB rsp, 0x28 = 40
+00007d: b9 f5 ff ff ff -> MOV ecx, -11 (STD_OUTPUT_HANDLE)
+000082: e8 00 00 00 00 -> CALL GetStdHandle (relocation)
+000087: 48 89 c1 -> MOV rcx, rax
+00008a: 48 8d 15 00 00 00 00 -> LEA rdx, [rip + msg] (msg needs relocation)
+000091: 41 b8 0d 00 00 00 -> MOV r8d, 13
+000097: 4c 8d 0d 0d 00 00 00 -> LEA r9, [rip + written] (relocation)
+00009e: 48 c7 44 24 20 00 00 00 00 -> MOV QWORD [rsp + 32], 0 (optional lpOverlapped)
+0000a7: e8 00 00 00 00 -> CALL WriteConsoleA (relocation)
+0000ac: 31 c9 -> XOR rcx, rcx 
+0000ae: e8 00 00 00 00 -> CALL ExitProcess (relocation)
+
+.text RELOCATIONS
+
+0000b3: 0e 00 00 00 -> virtual address: text + 14
+0000b7: 07 00 00 00 -> 7th index in the symbol table
+0000bb: 04 00 -> IMAGE_REL_AMD64_REL32
+
+0000bd: 18 00 00 00 -> virtual address: text + 24
+0000c1: 02 00 00 00 -> 2nd index in symbol table
+0000c5: 04 00
+
+0000c7: 25 00 00 00 -> text + 37
+0000cb: 02 00 00 00 -> index 2
+0000cf: 04 00
+
+0000d1: 33 00 00 00 -> text + 51
+0000d5: 08 00 00 00 -> index 8
+0000d9: 04 00
+
+0000db: 3a 00 00 00 -> text + 58
+0000df: 09 00 00 00 -> index 9
+0000e3: 04 00
+
+SYMBOL TABLE
+
+0000E5: 2e 66 69 6c 65 00 00 00  -> ".file" (symbol name)
+0000ED: 00 00 00 00             -> value = 0 (unused)
+0000F1: fe ff                   -> section = -2 (special debug symbol)
+0000F3: 00 00                   -> type = 0
+0000F5: 67                      -> storage class = FILE
+0000F6: 01                      -> 1 auxiliary symbol follows
+
+0000F7: 6e 61 73 6d 74 65 73 74 -> "nasmtest"
+0000FF: 2e 73 00 00 00 00 00 00 -> ".s" + padding
+000107: 00 00 -> padding to 18 bytes
+
+000109: 2e 64 61 74 61 00 00 00 -> ".data"
+000111: 00 00 00 00             -> value = 0
+000115: 01 00                   -> section = 1 (.data)
+000117: 00 00                   -> type = 0
+000119: 03                      -> storage = STATIC
+00011A: 01                      -> 1 aux symbol
+
+00011B: 11 00 00 00 -> 17 bytes of data
+00011F: 00 00 -> no relocations
+000121: 00 00 -> no line no.s
+000123: 00 00 00 00 -> unused checksum output
+000127: 00 00 -> unused section 0
+000129: 00 -> no COMDAT
+00012A: 00 00 00 -> padding
+
+00012D: 2e 74 65 78 74 00 00 00 -> ".text" + padding
+000135: 00 00 00 00 -> offset 0 inside .text
+000139: 02 00 -> section = 2 (.text)
+00013B: 00 00 -> type = 0
+00013D: 03 -> static
+00013E: 01 -> 1 aux symbol
+
+00013F: 3e 00 00 00 -> 62 bytes of assembly matching header
+000143: 05 00 -> 5 relocations
+000145: 00 00 -> 0 line no.s
+000147: 00 00 00 00 -> unused checksum 0
+00014B: 00 00 -> 0 for unknown purposes
+00014D: 00 -> no COMDAT
+00014E: 00 00 00 -> padding
+
+000151: 2e 61 62 73 6f 6c 75 74 -> ".absolut"
+000159: 00 00 00 00 -> 0 value
+00015D: ff ff -> section -1 = absolute
+00015F: 00 00 -> 0 type
+000161: 03 -> static storage
+000162: 00 -> no aux
+
+000163: 00 00 00 00 -> in string table
+000167: 04 00 00 00 -> offset 4
+00016B: 00 00 00 00 -> zero value
+00016F: 00 00 -> section 0 (undef)
+000171: 00 00 -> type 0
+000173: 02 -> external storage
+000174: 00 -> no aux
+
+000175: 00 00 00 00 -> in string table
+000179: 11 00 00 00 -> offset 17
+00017D: 00 00 00 00 -> zero value
+000181: 00 00 -> section 0
+000183: 00 00 -> type 0
+000185: 02 -> ext. storage
+000186: 00 -> no aux
+
+000187: 00 00 00 00 -> in string table
+00018B: 1f 00 00 00 -> offset 31
+00018F: 00 00 00 00 -> 0 value
+000193: 00 00 -> section 0
+000195: 00 00 -> type 0
+000197: 02 -> ext.
+000198: 00 -> no aux
+
+000199: 6d 73 67 00 00 00 00 00 -> "msg" + padding
+0001a1: 00 00 00 00 -> value 0
+0001a5: 01 00 -> section 1 .data
+0001a7: 00 00 -> type 0
+0001a9: 03 -> static
+0001aa: 00 -> no aux
+
+0001ab: 6d 73 67 5f 6c 65 6e 00 -> "msg_len" + null
+0001b3: 0d 00 00 00 -> value 13 cuz Hello World + null = 13 chars
+0001b7: ff ff -> section -1 = absolute
+0001b9: 00 00 -> type 0
+0001bb: 03 -> static
+0001bc: 00 -> no aux
+
+warning: metadata
+0001bd: 00 00 00 00 00 2b 00 00 -> ?
+0001c5: 00 00 f5 ff -> -720896?
+0001c9: ff ff -> absolute
+0001cb: ff ff -> internal
+0001cd: 00 -> storage class 0 internal
+0001ce: 00 -> no aux
+
+0001cf: 77 72 69 74 74 65 6e 00 -> "written" + null
+0001d7: 0d 00 00 00 -> offset 13 in data
+0001db: 01 00 -> section 1 .data
+0001dd: 00 00 -> type 0
+0001df: 03 -> static storage
+0001e0: 00 -> no aux
+
+0001e1: 6d 61 69 6e 00 00 00 00 -> "main" + padding
+0001e9: 00 00 00 00 -> value 0
+0001ed: 02 00 -> section 2 .text
+0001ef: 00 00 -> type 0
+0001f1: 02 -> ext. storage
+0001f2: 00 -> no aux
+
+STRING TABLE
+
+0001f3: 3d 00 00 00 -> 61 bytes of strings incl. length dword
+0001f7: 47 65 74 53 74 64 48 61 6e 64 6c 65 00 -> "GetStdHandle\0"
+000204: 57 72 69 74 65 43 6F 6E 73 6F 6C 65 41 00 -> "WriteConsoleA\0"
+000212: 45 78 69 74 50 72 6F 63 65 73 73 00 -> "ExitProcess\0"
+00021e: 53 54 44 5F 4F 55 54 50 55 54 5F 48 41 4E 44 4C 45 00 -> "STD_OUTPUT_HANDLE\0"
