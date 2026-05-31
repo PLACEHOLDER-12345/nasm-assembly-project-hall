@@ -173,32 +173,23 @@ SYMBOL TABLE
 0001bb: 03 -> static
 0001bc: 00 -> no aux
 
-warning: metadata
-0001bd: 00 00 00 00 00 2b 00 00 -> ?
-0001c5: 00 00 f5 ff -> -720896?
-0001c9: ff ff -> absolute
-0001cb: ff ff -> internal
-0001cd: 00 -> storage class 0 internal
+0001bd: 77 72 69 74 74 65 6e 00 -> "written" + null
+0001c5: 0d 00 00 00 -> offset 13 in data
+0001c9: 01 00 -> section 1 .data
+0001cb: 00 00 -> type 0
+0001cd: 03 -> static storage
 0001ce: 00 -> no aux
 
-0001cf: 77 72 69 74 74 65 6e 00 -> "written" + null
-0001d7: 0d 00 00 00 -> offset 13 in data
-0001db: 01 00 -> section 1 .data
+0001cf: 6d 61 69 6e 00 00 00 00 -> "main" + padding
+0001d7: 00 00 00 00 -> value 0
+0001db: 02 00 -> section 2 .text
 0001dd: 00 00 -> type 0
-0001df: 03 -> static storage
-0001e0: 00 -> no aux
-
-0001e1: 6d 61 69 6e 00 00 00 00 -> "main" + padding
-0001e9: 00 00 00 00 -> value 0
-0001ed: 02 00 -> section 2 .text
-0001ef: 00 00 -> type 0
-0001f1: 02 -> ext. storage
-0001f2: 00 -> no aux
+0001de: 02 -> ext. storage
+0001df: 00 -> no aux
 
 STRING TABLE
 
-0001f3: 3d 00 00 00 -> 61 bytes of strings incl. length dword
-0001f7: 47 65 74 53 74 64 48 61 6e 64 6c 65 00 -> "GetStdHandle\0"
-000204: 57 72 69 74 65 43 6F 6E 73 6F 6C 65 41 00 -> "WriteConsoleA\0"
-000212: 45 78 69 74 50 72 6F 63 65 73 73 00 -> "ExitProcess\0"
-00021e: 53 54 44 5F 4F 55 54 50 55 54 5F 48 41 4E 44 4C 45 00 -> "STD_OUTPUT_HANDLE\0"
+0001e0: 3d 00 00 00 -> 61 bytes of strings incl. length dword
+0001e4: 47 65 74 53 74 64 48 61 6e 64 6c 65 00 -> "GetStdHandle\0"
+0001f0: 57 72 69 74 65 43 6F 6E 73 6F 6C 65 41 00 -> "WriteConsoleA\0"
+0001fd: 45 78 69 74 50 72 6F 63 65 73 73 00 -> "ExitProcess\0"
