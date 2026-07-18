@@ -3,7 +3,6 @@ GLOBAL  main
 
 EXTERN  GetStdHandle
 EXTERN  WriteConsoleA
-EXTERN  MessageBoxA
 EXTERN  ExitProcess
 
 SECTION .data
